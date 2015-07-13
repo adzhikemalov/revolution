@@ -67,7 +67,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\CharacterMovement.cs" />
-    <Compile Include="Assets\Scripts\MouseOrbitImproved.cs" />
+    <Compile Include="Assets\Scripts\Door.cs" />
     <Compile Include="Assets\Scripts\PlaneInput.cs" />
     <Compile Include="Assets\Scripts\UserInput.cs" />
   </ItemGroup>

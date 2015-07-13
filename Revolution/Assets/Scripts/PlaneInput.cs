@@ -48,18 +48,26 @@ public class PlaneInput : MonoBehaviour {
             }
         }
 
-        agent.transform.position = player.transform.position;
+	    if (agent.isOnOffMeshLink)
+	    {
+            agent.Stop();
+            movementController.Move(Vector3.zero);
+	    }
+	    else
+	    {
+            agent.transform.position = player.transform.position;
 
-        if (movementController != null)
-        {
-            if ( (targetPosition - movementController.gameObject.transform.position).magnitude > .1)
+            if (movementController != null)
             {
-                movementController.Move(agent.desiredVelocity);
+                if ((targetPosition - movementController.gameObject.transform.position).magnitude > .1)
+                {
+                    movementController.Move(agent.desiredVelocity);
+                }
+                else
+                {
+                    movementController.Move(Vector3.zero);
+                }
             }
-            else
-            {
-                movementController.Move(Vector3.zero);
-            }
-        }
+	    }
 	}
 }

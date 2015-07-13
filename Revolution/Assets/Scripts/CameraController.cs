@@ -1,22 +1,45 @@
 ﻿using UnityEngine; 
 using System.Collections;
-public class CameraController : MonoBehaviour 
-{ 
-    public GameObject player; 
-    //The offset of the camera to centrate the player in the X axis 
-    public float offsetX = -5; //The offset of the camera to centrate the player in the Z axis 
-    public float offsetZ = 0; //The maximum distance permited to the camera to be far from the player, its used to make a smooth movement 
-    public float maximumDistance = 2; //The velocity of your player, used to determine que speed of the camera 
-    public float playerVelocity = 10;
+public class CameraController : MonoBehaviour
+{
+    // How fast the camera moves
+    int cameraVelocity = 10;
 
-    private float movementX;
-    private float movementZ;
-
-// Update is called once per frame 
-    void FixedUpdate () 
+    // Use this for initialization
+    void Start()
     {
-        movementX = ((player.transform.position.x + offsetX - this.transform.position.x))/maximumDistance; 
-        movementZ = ((player.transform.position.z + offsetZ - this.transform.position.z))/maximumDistance;
-        this.transform.position += new Vector3((movementX * playerVelocity * Time.deltaTime), 0, (movementZ * playerVelocity * Time.deltaTime));
-    } 
+        initialPosition = transform.position;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Left
+        if ((Input.GetKey(KeyCode.LeftArrow)))
+        {
+            transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime);
+        }
+        // Right
+        if ((Input.GetKey(KeyCode.RightArrow)))
+        {
+            transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime);
+        }
+        // Up
+        if ((Input.GetKey(KeyCode.UpArrow)))
+        {
+            transform.Translate((Vector3.up * cameraVelocity) * Time.deltaTime);
+        }
+        // Down
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.Translate((Vector3.down * cameraVelocity) * Time.deltaTime);
+        }
+
+        CurrentZoom -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * 1000;
+        Camera.main.orthographicSize = CurrentZoom;
+ 
+    }
+
+    private Vector3 initialPosition;
+    public float CurrentZoom = 10;
 }
