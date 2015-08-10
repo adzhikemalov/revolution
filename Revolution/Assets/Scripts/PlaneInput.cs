@@ -2,54 +2,34 @@
 using System.Collections;
 
 public class PlaneInput : MonoBehaviour {
-    CharacterMovement movementController;
-    Vector3 targetPosition;
-    NavMeshAgent agent;
-    GameObject player;
+    CharacterMovement _movementController;
+    Vector3 _targetPosition;
+    GameObject _player;
+    
 	// Use this for initialization
 	void Start () {
 
-        player = GameObject.FindGameObjectWithTag("Player");
-        agent = player.GetComponent<NavMeshAgent>();
+        _player = GameObject.FindGameObjectWithTag("Player");
 	}
 
-    void OnDrawGizmos()
+    private void FixedUpdate()
     {
-        if (Application.isPlaying)
-        {
-            Gizmos.color = Color.blue;
-            var i = 1;
-            var previousCorner = agent.transform.position;
-            while (i < agent.path.corners.Length)
-            {
-                Vector3 currentCorner = agent.path.corners[i];
-                Gizmos.DrawLine(previousCorner, currentCorner);
-                previousCorner = currentCorner;
-                i++;
-            }
-        }
-
-    }
-	// Update is called once per frame
-	void FixedUpdate () 
-    {
-
         var ball = GameObject.FindGameObjectWithTag("Ball");
-	    if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
-            if (movementController == null)
+            if (_movementController == null)
             {
-                if (player)
+                if (_player)
                 {
-                    movementController = player.GetComponent<CharacterMovement>();
-                    if (movementController == null)
+                    _movementController = _player.GetComponent<CharacterMovement>();
+                    if (_movementController == null)
                     {
                         Debug.Log("No character movement script attached");
                     }
                 }
                 else
                 {
-                    Debug.Log("Can't fin Player");
+                    Debug.Log("Can't find Player");
                 }
             }
             else
@@ -61,70 +41,14 @@ public class PlaneInput : MonoBehaviour {
                 if (Physics.Raycast(ray, out rayHit, Mathf.Infinity, layerMask))
                 {
                     ball.transform.position = rayHit.point;
-                    targetPosition = rayHit.point;
+                    _targetPosition = rayHit.point;
                 }
             }
         }
 
-        agent.SetDestination(ball.transform.position);
-	    if (FacingClosedDoor)
-	    {
-	        TryOpenTheDoor();
-	    }
-	    else
-	    {
-//            agent.transform.position = player.transform.position;
-
-            if (movementController != null)
-            {
-                if ((targetPosition - movementController.gameObject.transform.position).magnitude > .1)
-                {
-                    movementController.Move(agent.desiredVelocity);
-                }
-                else
-                {
-                    movementController.Move(Vector3.zero);
-                }
-            }
-	    }
-	}
-
-    private void TryOpenTheDoor()
-    {
-//        agent.Stop();
-//        movementController.Move(Vector3.zero);
-        var door = agent.currentOffMeshLinkData.offMeshLink.gameObject.GetComponent<Door>();
-        if (!door.IsOpening)
-            door.Open();
-    }
-
-    private bool FacingClosedDoor
-    {
-        get
+        if (_movementController != null && _targetPosition != _movementController.TargetPosition)
         {
-            var result = false;
-            if (agent.isOnOffMeshLink)
-            {
-                var door = agent.currentOffMeshLinkData.offMeshLink.gameObject.GetComponent<Door>();
-                if (door)
-                {
-                    if (door.IsOpen)
-                    {
-                        result = false;
-                    }
-                    else
-                    {
-                        result = true;
-                    }
-
-                }
-                else
-                {
-                    result = false;
-                }
-                result = true;
-            }
-            return result;
+            _movementController.TargetPosition = _targetPosition;
         }
     }
 }

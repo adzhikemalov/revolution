@@ -5,8 +5,16 @@ public class Door : MonoBehaviour
 {
     private Animator _animator;
     private OffMeshLink _link;
+
+    [HideInInspector]
     public bool IsOpen;
+    [HideInInspector]
     public bool IsOpening;
+
+    public event EmptyHandler DoorOpened;
+    public event EmptyHandler DoorClosed;
+
+
 
     // Use this for initialization
 	void Start ()
@@ -16,11 +24,23 @@ public class Door : MonoBehaviour
 	    _animator = GetComponent<Animator>();
 	}
 
+    public void DoorOpenedAnimation()
+    {
+        IsOpen = true;
+        IsOpening = false;
+        if (DoorOpened != null) DoorOpened();
+    }
+
+    public void DoorClosedAnimation()
+    {
+        IsOpen = false;
+        IsOpening = false;
+        if (DoorClosed != null) DoorClosed();
+    }
     public void Open()
     {
         _animator.SetTrigger("Open");
         IsOpening = true;
-        Debug.Log("Open");
     }
 
     public void Close()

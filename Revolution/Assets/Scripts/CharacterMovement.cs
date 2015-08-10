@@ -2,42 +2,45 @@
 using System.Collections;
 
 public class CharacterMovement : MonoBehaviour {
-    float moveSpeedMultiplier = 1;
-    public float stationaryTurnSpeed = 180;
-    public float movingTurnSpeed = 360;
+    public float MoveSpeedMultiplier = 1;
+    public float StationaryTurnSpeed = 180;
+    public float MovingTurnSpeed = 360;
+    public float JumpPower = 10;
+    float _turnAmount;
+    float _forwardAmount;
+    private Vector3 _moveInput;
+    private Vector3 _velocity;
+    private Rigidbody _rigBody;
+    private Animator _anim;
 
-    Rigidbody rigBody;
+    private IComparer _rayHitComparer;
+    public Vector3 TargetPosition { get; set; }
 
-    bool onGround;
-
-    Animator anim;
-
-    Vector3 moveInput;
-    float turnAmount;
-    float forwardAmount;
-    Vector3 velocity;
-
-    float jumpPower = 10;
-    IComparer rayHitComparer;
-    float targetTolerance = 1;
-    Vector3 targetPosition;
-    bool moveToTarget;
-
-	// Use this for initialization
+    // Use this for initialization
 	void Start () {
-        rigBody = GetComponent<Rigidbody>();
+        _rigBody = GetComponent<Rigidbody>();
         SetupAnimator();
+	    TargetPosition = transform.position;
 	}
+
+    void Update()
+    {
+        Move(TargetPosition - transform.position);
+    }
     
     public void Move(Vector3 move)
     {
+        if (Vector3.Distance(move, TargetPosition) < 1)
+        {
+            return;
+        }
         if (move.magnitude > 1)
         {
             move.Normalize();
         }
         
-        moveInput = move;
-        velocity = rigBody.velocity;
+        _moveInput = move;
+        _velocity = _rigBody.velocity;
         ConvertMoveInput();
         ApplyTurnExtraRotation();
         GroundCheck();
@@ -46,13 +49,13 @@ public class CharacterMovement : MonoBehaviour {
 
     void SetupAnimator()
     {
-        anim = GetComponent<Animator>();
+        _anim = GetComponent<Animator>();
 
         foreach(Animator childAnimator in GetComponentsInChildren<Animator>())
         {
-            if (childAnimator != anim)
+            if (childAnimator != _anim)
             {
-                anim.avatar = childAnimator.avatar;
+                _anim.avatar = childAnimator.avatar;
                 Destroy(childAnimator);
                 break;
             }
@@ -61,33 +64,33 @@ public class CharacterMovement : MonoBehaviour {
 
     void OnAnimatorMove()
     {
-        if (onGround && Time.deltaTime > 0)
+        if (Time.deltaTime > 0)
         {
-            Vector3 v = (anim.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
-            v.y = rigBody.velocity.y;
-            rigBody.velocity = v;
+            Vector3 v = (_anim.deltaPosition * MoveSpeedMultiplier) / Time.deltaTime;
+            v.y = _rigBody.velocity.y;
+            _rigBody.velocity = v;
         }
     }
 
     void ConvertMoveInput()
     {
-        Vector3 localMove = transform.InverseTransformDirection(moveInput);
-        turnAmount = Mathf.Atan2(localMove.x, localMove.z);
-        forwardAmount = localMove.z;
+        Vector3 localMove = transform.InverseTransformDirection(_moveInput);
+        _turnAmount = Mathf.Atan2(localMove.x, localMove.z);
+        _forwardAmount = localMove.z;
     }
 
     void UpdateAnimator()
     {
-        anim.applyRootMotion = true;
+        _anim.applyRootMotion = true;
 
-        anim.SetFloat("forward", forwardAmount, 0.1f, Time.deltaTime);
-        anim.SetFloat("turn", turnAmount, 0.1f, Time.deltaTime);
+        _anim.SetFloat("forward", _forwardAmount, 0.1f, Time.deltaTime);
+        _anim.SetFloat("turn", _turnAmount, 0.1f, Time.deltaTime);
     }
 
     void ApplyTurnExtraRotation()
     {
-        float turnSpeed = Mathf.Lerp(stationaryTurnSpeed, movingTurnSpeed, forwardAmount);
-        transform.Rotate(0, turnAmount * turnSpeed * Time.deltaTime, 0);
+        float turnSpeed = Mathf.Lerp(StationaryTurnSpeed, MovingTurnSpeed, _forwardAmount);
+        transform.Rotate(0, _turnAmount * turnSpeed * Time.deltaTime, 0);
     }
 
     void GroundCheck()
@@ -95,25 +98,22 @@ public class CharacterMovement : MonoBehaviour {
         Ray ray = new Ray(transform.position + Vector3.up * .5f, - Vector3.up);
 
         RaycastHit[] hits = Physics.RaycastAll(ray, .5f);
-        rayHitComparer = new RayHitComparer();
+        _rayHitComparer = new RayHitComparer();
 
-        System.Array.Sort(hits, rayHitComparer);
-        if (velocity.y < jumpPower*.5f)
+        System.Array.Sort(hits, _rayHitComparer);
+        if (_velocity.y < JumpPower*.5f)
         {
-            //onGround = false;
-            rigBody.useGravity = true;
+            _rigBody.useGravity = true;
             foreach(var hit in hits)
             {
                 if (!hit.collider.isTrigger)
                 {
-                    if (velocity.y <= 0)
+                    if (_velocity.y <= 0)
                     {
-                        rigBody.position = Vector3.MoveTowards(rigBody.position, hit.point, Time.deltaTime * 5);
+                        _rigBody.position = Vector3.MoveTowards(_rigBody.position, hit.point, Time.deltaTime * 5);
                     }
 
-                    onGround = true;
-                    rigBody.useGravity = false;
-
+                    _rigBody.useGravity = false;
                     break;
                 }
             }
