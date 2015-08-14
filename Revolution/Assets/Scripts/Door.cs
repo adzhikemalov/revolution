@@ -14,8 +14,6 @@ public class Door : MonoBehaviour
     public event EmptyHandler DoorOpened;
     public event EmptyHandler DoorClosed;
 
-
-
     // Use this for initialization
 	void Start ()
 	{
@@ -29,6 +27,8 @@ public class Door : MonoBehaviour
         IsOpen = true;
         IsOpening = false;
         if (DoorOpened != null) DoorOpened();
+        
+        Invoke("Close", 1f);
     }
 
     public void DoorClosedAnimation()

@@ -5,8 +5,7 @@ public class PlaneInput : MonoBehaviour {
     CharacterMovement _movementController;
     Vector3 _targetPosition;
     GameObject _player;
-    
-	// Use this for initialization
+
 	void Start () {
 
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -46,7 +45,7 @@ public class PlaneInput : MonoBehaviour {
             }
         }
 
-        if (_movementController != null && _targetPosition != _movementController.TargetPosition)
+        if (_movementController != null)
         {
             _movementController.TargetPosition = _targetPosition;
         }
