@@ -4,14 +4,14 @@ using System.Collections;
 public class Door : MonoBehaviour
 {
     private Animator _animator;
-    private OffMeshLink _link;
+    private BoxCollider _collider;
 
     [HideInInspector]
     public bool IsOpen;
     [HideInInspector]
     public bool IsOpening;
 
-    public event EmptyHandler DoorOpened;
+    public event ParameterHandler<Door> DoorOpened;
     public event EmptyHandler DoorClosed;
 
     // Use this for initialization
@@ -20,17 +20,15 @@ public class Door : MonoBehaviour
 	    IsOpen = false;
 	    IsOpening = false;
 	    _animator = GetComponent<Animator>();
+	    _collider = GetComponent<BoxCollider>();
 	}
 
     public void DoorOpenedAnimation()
     {
         IsOpen = true;
         IsOpening = false;
-        if (DoorOpened != null) DoorOpened();
-        
-        Invoke("Close", 1f);
+        if (DoorOpened != null) DoorOpened(this);
     }
-
     public void DoorClosedAnimation()
     {
         IsOpen = false;

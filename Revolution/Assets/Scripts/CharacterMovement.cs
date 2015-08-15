@@ -54,9 +54,10 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    private void DoorOpenedHandler()
+    private void DoorOpenedHandler(Door caller)
     {
         _wait = false;
+        caller.DoorOpened -= DoorOpenedHandler;
     }
 
     void FixedUpdate()
