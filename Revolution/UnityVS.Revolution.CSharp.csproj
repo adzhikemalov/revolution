@@ -7,14 +7,16 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D7BA080F-FEDE-0A1D-BDDF-9CF773FA8213}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>Assembly-CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -619,12 +621,17 @@
     <Compile Include="Assets\PlayMaker\Actions\iTween\iTweenShakeScale.cs" />
     <Compile Include="Assets\PlayMaker\Actions\iTween\iTweenStop.cs" />
     <Compile Include="Assets\PlayMaker\Include\iTweenFSMEvents.cs" />
-    <Compile Include="Assets\Scripts\CameraController.cs" />
-    <Compile Include="Assets\Scripts\CharacterMovement.cs" />
-    <Compile Include="Assets\Scripts\Door.cs" />
-    <Compile Include="Assets\Scripts\EventDelegates.cs" />
-    <Compile Include="Assets\Scripts\PlaneInput.cs" />
-    <Compile Include="Assets\Scripts\UserInput.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
+    <Compile Include="Assets\Scripts\GUI\MainScreenUI.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\Game.cs" />
+    <Compile Include="Assets\Scripts\Managers\OfficeManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\TimeManager.cs" />
+    <Compile Include="Assets\Scripts\Movement\CharacterMovement.cs" />
+    <Compile Include="Assets\Scripts\Movement\PlaneInput.cs" />
+    <Compile Include="Assets\Scripts\Objects\Door.cs" />
+    <Compile Include="Assets\Scripts\Objects\WorkingPlace.cs" />
+    <Compile Include="Assets\Scripts\Utils\EventDelegates.cs" />
     <Compile Include="Assets\iTween\iTween.cs" />
     <None Include="Assets\iTween\ReadMe!\ReadMe!.txt" />
     <None Include="Assets\PlayMaker\Readme.txt" />
