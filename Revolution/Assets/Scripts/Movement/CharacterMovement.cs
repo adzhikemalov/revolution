@@ -1,10 +1,9 @@
-﻿using HutongGames.PlayMaker.Actions;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
-
+    private static int _avoidPriority= 50;
     float moveSpeedMultiplier = 1;
     float stationaryTurnSpeed = 180;
     float movingTurnSpeed = 360;
@@ -33,10 +32,10 @@ public class CharacterMovement : MonoBehaviour
         SetUpAnimator();
 
         rigidBody = GetComponent<Rigidbody>();
-
-        TargetPosition = transform.position;
-
         agent = GetComponent<NavMeshAgent>();
+
+        agent.avoidancePriority = _avoidPriority;
+        _avoidPriority++;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -109,13 +108,13 @@ public class CharacterMovement : MonoBehaviour
         if (move.magnitude > 1)
             move.Normalize();
 
-        this.moveInput = move;
+        moveInput = move;
 
         velocity = GetComponent<Rigidbody>().velocity;
 
         ConvertMoveInput();
         ApplyExtraTurnRotation();
-        GroundCheck();
+//        GroundCheck();
         UpdateAnimator();
 
     }
@@ -126,7 +125,7 @@ public class CharacterMovement : MonoBehaviour
 
         turnAmount = Mathf.Atan2(localMove.x, localMove.z);
 
-        forwardAmount = localMove.z;
+        forwardAmount = localMove.z*agent.speed*0.25f;
     }
 
     void ApplyExtraTurnRotation()

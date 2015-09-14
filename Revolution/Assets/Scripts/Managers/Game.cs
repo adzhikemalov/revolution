@@ -9,14 +9,12 @@ public class Game : MonoBehaviour
     public float TimeMultiplier;
     public static Game Instance { get; set; }
     public static TimeManager TimeManager { get; set; }
-    public static AIManager AIManager { get; set; }
     public static OfficeManager OfficeManager { get; set; }
     // Use this for initialization
     private void Awake()
     {
         Instance = this;
         TimeManager = new TimeManager();
-        AIManager = new AIManager();
         OfficeManager = new OfficeManager();
     }
 

@@ -4,7 +4,6 @@ using System.Collections;
 public class Door : MonoBehaviour
 {
     private Animator _animator;
-    private BoxCollider _collider;
 
     [HideInInspector]
     public bool IsOpen;
@@ -20,7 +19,6 @@ public class Door : MonoBehaviour
 	    IsOpen = false;
 	    IsOpening = false;
 	    _animator = GetComponent<Animator>();
-	    _collider = GetComponent<BoxCollider>();
 	}
 
     public void DoorOpenedAnimation()

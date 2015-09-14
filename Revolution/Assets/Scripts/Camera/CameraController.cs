@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        initialPosition = transform.position;
+
     }
 
     // Update is called once per frame
@@ -40,6 +40,5 @@ public class CameraController : MonoBehaviour
  
     }
 
-    private Vector3 initialPosition;
     public float CurrentZoom = 10;
 }
